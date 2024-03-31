@@ -33,8 +33,8 @@ namespace Module32_MVC_Net5.Repository
 
         public async Task<Request[]> GetRequests()
         {
-            // Получение всех записей лога в порядке возрастания даты
-            return await _context.Requests.OrderBy(r => r.Date).ToArrayAsync();
+            // Получение всех записей лога в порядке убывания даты
+            return await _context.Requests.OrderByDescending(r => r.Date).ToArrayAsync();
         }
     }
 }

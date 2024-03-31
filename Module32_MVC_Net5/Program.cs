@@ -21,6 +21,8 @@ namespace Module32_MVC_Net5
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseDefaultServiceProvider(options =>
+            options.ValidateScopes = false);
                 });
     }
 }

@@ -14,14 +14,8 @@ namespace Module32_MVC_Net5.Controllers
 {
     public class HomeController : Controller
     {
-        // ссылка на репозиторий
-        private readonly IBlogRepository _repo;
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger, IBlogRepository repo)
+        public HomeController()
         {
-            _logger = logger;
-            _repo = repo;
         }
 
         // Сделаем метод асинхронным

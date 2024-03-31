@@ -28,13 +28,19 @@ namespace Module32_MVC_Net5
         public void ConfigureServices(IServiceCollection services)
         {
             // регистрация сервиса репозитория ведения блога для взаимодействия с базой данных
-            services.AddSingleton<IBlogRepository, BlogRepository>();
+            //И тут налетаю на ошибку "В этом контексте была начата вторая операция до завершения предыдущей операции" при частом обновлении представления
+            //https://learn.microsoft.com/ru-ru/ef/core/dbcontext-configuration/#avoiding-dbcontext-threading-issues
+            //Заменил Singleton на Scope
+            //services.AddSingleton<IBlogRepository, BlogRepository>();
+            services.AddScoped<IBlogRepository, BlogRepository>();
 
             // Задание 32.11.1 - Регистрация сервиса репозитория логгера для взаимодействия с базой данных
-            services.AddSingleton<ILoggerRepository, LoggerRepository>();
+            //services.AddSingleton<ILoggerRepository, LoggerRepository>();
+            services.AddScoped<ILoggerRepository, LoggerRepository>();
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
+            //services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
+            services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection),ServiceLifetime.Scoped);
 
             ////Задание 32.11.1 - Подключаю контекст для логирования в БД
             //services.AddDbContext<LoggerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
@@ -72,13 +78,6 @@ namespace Module32_MVC_Net5
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Users}/{action=Authors}/{id?}");
             });
         }
     }
