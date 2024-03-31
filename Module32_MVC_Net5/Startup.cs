@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Module32_MVC_Net5.Middleware;
-using Module32_MVC_Net5.Models.Db;
+using Module32_MVC_Net5.Models.Contexts;
 using Module32_MVC_Net5.Repository;
 using System;
 using System.Collections.Generic;
@@ -27,11 +27,18 @@ namespace Module32_MVC_Net5
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // регистрация сервиса репозитория для взаимодействия с базой данных
+            // регистрация сервиса репозитория ведения блога для взаимодействия с базой данных
             services.AddSingleton<IBlogRepository, BlogRepository>();
+
+            // Задание 32.11.1 - Регистрация сервиса репозитория логгера для взаимодействия с базой данных
+            services.AddSingleton<ILoggerRepository, LoggerRepository>();
 
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<BlogContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
+
+            ////Задание 32.11.1 - Подключаю контекст для логирования в БД
+            //services.AddDbContext<LoggerContext>(options => options.UseSqlServer(connection), ServiceLifetime.Singleton);
+
             services.AddControllersWithViews();
         }
 

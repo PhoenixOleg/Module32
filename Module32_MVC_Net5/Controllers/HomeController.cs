@@ -25,7 +25,7 @@ namespace Module32_MVC_Net5.Controllers
         }
 
         // Сделаем метод асинхронным
-        public async Task <IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
